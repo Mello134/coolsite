@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-d-0(#r$)eenq&z9%&1nx+7q2hicn0h6d^xyo7u60ra+vzax&on'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
 
@@ -76,8 +76,14 @@ WSGI_APPLICATION = 'coolsite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',  # стандартная База данных
+        'ENGINE': 'django.db.backends.postgresql',  # поменяли на postgresql - джижок постгрес
+        'NAME': 'coolsitedb',  # поменяли на - имя нашей БД
+        'USER': 'postgres',  # пользователь postgres - который создал БД
+        'PASSWORD': 'blog1234',  # пароль в PostgreSQL, для пользователя postgres
+        'HOST': '127.0.0.1',  # либо просто - 'localhost'
+        'PORT': '5432',  # стандартный порт
     }
 }
 
@@ -104,9 +110,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-Ru'  # русский язык в admin
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'  # время по МСК
 
 USE_I18N = True
 
@@ -118,7 +124,20 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+
+
+
+# import os.path # обязательно импортируй, если показывать пути через os.path
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # будет загружать медия в папку media
+MEDIA_ROOT = BASE_DIR / 'media'  # будет загружать медия в папку media
+MEDIA_URL = '/media/'  # добавили url - будет отображатся в браузере
+
+
+
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
