@@ -122,7 +122,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'static/'  # стандартно
+
+# STATIC_ROOT добавили, в эту папку при collectstatic - django перемещает все статические файлы
+# путь djsite/coolsite - из этой папке, статический файлы будут пользоватся в режиме эксплуатации сайта на сервере
+STATIC_ROOT = BASE_DIR / 'static'
+
+# добавили пустой список, список нестандартных путей, пока у нас нет, оставим пустым
+STATICFILES_DIRS = []
+
 
 
 
@@ -131,6 +139,8 @@ STATIC_URL = 'static/'
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # будет загружать медия в папку media
 MEDIA_ROOT = BASE_DIR / 'media'  # будет загружать медия в папку media
 MEDIA_URL = '/media/'  # добавили url - будет отображатся в браузере
+
+
 
 
 

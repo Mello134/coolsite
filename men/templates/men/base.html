@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> --> 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- css bootstrap 5 - если будем пользоваться -->
+
+    <!-- ссыылка к нашему css файлу -->
+    <link rel="stylesheet" type="text/css" href="{% static 'men/css/styles.css' %}">
+    <!-- загружаем иконку для отоброжения в браузере где titte-->
+    <link rel="shortcut icon" href="{% static 'men/images/main.ico' %}" type="image/x-icon"/>
+
+
+    <title>{{ title }}</title>
+
+</head>
+<body>
+    <table class="table-page" border=0 cellpadding="0" cellspacing="0">
+        <tr>
+            <td valign=top>
+                <!-- Навбар -->
+                {% block mainmenu %}
+                    <div class="header">
+                        <ul  id="mainmenu" class="mainmenu">
+                            <!-- Это лого внутри навбар -->
+                            <li class="logo"><a href="#"><div class="logo"></div></a></li>
+                            <!-- перебираем все в списке меню (men/views.py) -->
+                            {% for m in menu %}
+                                <!-- если не последний -->
+                                {% if not forloop.last %}
+                                <li><a href="#">{{m.title}}</a></li>
+                                {% else %}
+                                <li class="last"><a href="#">{{m.title}}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div> <!-- <div class="header"> -->
+                <!-- Конец Навбар -->
+                {% endblock mainmenu %}
+
+
+    <table class="table-content" border=0 cellpadding="0" cellspacing="0">
+        <tr><!-- строка -->
+            <!-- Sidebar слева -->
+            <td valign="top" class="left-chapters"><!--  столбец -->
+                <ul id="leftchapters">
+                    <li class="selected">Все категории</li>
+                    <li><a href="#">Актёры</a></li>
+                    <li><a href="#">Музыканты</a></li>
+                    <li><a href="#">Спортсмены</a></li>
+                    <li class="share">
+                        <p>Наш канал</p>
+                        <a class="share-yt" href="https://www.youtube.com/" target="_blank" rel="nofollow"></a>
+                    </li>
+                </ul><!-- конец списка слева -->
+            </td><!-- Sidebar конец -->
+
+            <td valign="top" class="content">
+                <!-- Хлебные крошки -->
+                {% block breadcrumbs %}
+                {% endblock %}
+
+
+                <!-- Блок контента индивидуальный для каждого -->
+                <div class="content-text">
+                    {% block content %}
+                    {% endblock %}
+                </div>
+                <!-- Конец блока контента -->
+
+            </td><!-- valign="top" class="content" -->
+        </tr><!-- строка сайдбара -->
+    </table><!-- таблицы сайдбара -->
+    </td></tr><!-- столбец строка навбара -->
+
+        <!-- Footer -->
+        <tr>
+            <td valign=top>
+                <div id="footer">
+                    <p>&copy; 2021 Частичное или полное копирование информации с данного сайта для распространения на других ресурсах, в том числе и бумажных, строго запрещено.</p>
+                </div>
+            </td>
+        </tr>
+    </table><!-- Конец самой первой таблицы, до неавбара -->
+    <!-- Конец footer'а и страницы -->
+                         
+</body>
+
+
+
+
+
+
+
+
+<!-- JS Bootstrap 5 -->
+</body>
+</html>
+
+
