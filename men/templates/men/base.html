@@ -26,15 +26,17 @@
                     <div class="header">
                         <ul  id="mainmenu" class="mainmenu">
                             <!-- Это лого внутри навбар -->
-                            <li class="logo"><a href="#"><div class="logo"></div></a></li>
+                            <li class="logo"><a href="{% url 'home' %}"><div class="logo"></div></a></li>
                             <!-- перебираем все в списке меню (men/views.py) -->
                             {% for m in menu %}
+
                                 <!-- если не последний -->
                                 {% if not forloop.last %}
-                                <li><a href="#">{{m.title}}</a></li>
+                                <li><a href="{% url m.url_name %}">{{m.title}}</a></li>
                                 {% else %}
-                                <li class="last"><a href="#">{{m.title}}</a></li>
-                                {% endif %}
+                                <li class="last"><a href="{% url m.url_name %}">{{m.title}}</a></li>
+                                {% endif %}                                
+                            
                             {% endfor %}
                         </ul>
                     </div> <!-- <div class="header"> -->
@@ -47,10 +49,32 @@
             <!-- Sidebar слева -->
             <td valign="top" class="left-chapters"><!--  столбец -->
                 <ul id="leftchapters">
-                    <li class="selected">Все категории</li>
-                    <li><a href="#">Актёры</a></li>
-                    <li><a href="#">Музыканты</a></li>
-                    <li><a href="#">Спортсмены</a></li>
+                  
+                  <!--  еслы ссылка выбрана (то есть не выбрана категория никакая) 
+                    тогда "все категории" отобразатся не как ссылка, а просто надписью
+                    иначе, если будет выбрана какаято категория, то "все категории" - будет ссылкой -->
+                    {% if cat_selected == 0 %}
+                        <li class="selected">Все категории</li>
+                    {% else %}
+                        <li><a href="{% url 'home' %}">Все категории</a></li>
+                    {% endif %}
+
+
+                    <!-- далее цикл: перебираем записи c в модели cats -->
+                    <!-- cats = Category.objects.all() - в def index -->
+                        <!-- проверка если ключ pk == выбранной категории cat_selected
+                        будет показывать как простую  строку (выделенную как выбраная)
+                        если не совпадают будут показывать как ссылку -->
+                    {% for c in cats %}
+                        {% if c.pk == cat_selected %} 
+                            <li class="selected">{{ c.name }}</li>
+                        {% else %}
+                            <li><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+
+
                     <li class="share">
                         <p>Наш канал</p>
                         <a class="share-yt" href="https://www.youtube.com/" target="_blank" rel="nofollow"></a>
