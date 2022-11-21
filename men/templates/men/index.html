@@ -12,6 +12,19 @@
                 Дата обнавления: {{ p.time_update|date:'d-m-Y H:i:s' }}
             </p>
         </div>
+
+        <!-- Отобрадение фото, если в записи фото загружено: -->
+        <!-- posts = Men.objects.all()
+        p = одна запись из posts -->
+        {% if p.photo %}
+            <p>
+                <img class="img-article-left thumb" src="{{ p.photo.url }}">
+            </p>
+        {% endif %}
+
+
+
+
         <h2>{{ p.title }}</h2>
         <p>{{ p.content|linebreaks|truncatewords:50 }}</p>
         <div class="clear"></div>
