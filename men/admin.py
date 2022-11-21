@@ -13,12 +13,14 @@ class MenAdmin(admin.ModelAdmin):
     list_editable = ('is_publisher',)  # запятая - если 1 поле!
     # фильтрование по полям - публикация, время изменения.
     list_filter = ('is_publisher', 'time_create')
+    prepopulated_fields = {'slug': ('title',)}  # автозаполнение слага по имени поста
 
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
     list_display_links = ('id', 'name')
     search_fields = ('name',)  # ЗАПЯТАЯ В КОНЦЕ- при одном поле
+    prepopulated_fields = {'slug': ('name',)}  # автозаполнение слага по имени категории
 
 
 # Register your models here.

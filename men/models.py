@@ -6,6 +6,8 @@ from django.urls import reverse
 class Men (models.Model):  # наследуем все функции для нашего класса Men от Django класса Model
     # Id прописывать не нужно - Model Это делает автоматически
     title = models.CharField(max_length=255, verbose_name='Заголовок')  # длина 255 символов
+    # unique=True - поле уникально, db_index=True - индексируемое (для ускорения поиска, verbose_name - отображение в адм.
+    slug = models.SlugField(max_length=255,unique=True, db_index=True, verbose_name='URL')
     content = models.TextField(blank=True, verbose_name='Текст статьи')  # текстовое поле без ограничений, blank=True - поле может быть пустым
     photo = models.ImageField(upload_to='photos/%Y/%m/%d', verbose_name='Фото')  # загружать будем в photos/год/месяц/день
     # дата время - создание, auto_now_add=True - создастся единожды
@@ -21,7 +23,7 @@ class Men (models.Model):  # наследуем все функции для н�
 
     # функция формирования маршрута к ссылке
     def get_absolute_url(self):  # self - ссылка на один экземпляр(строку) таблицы модели
-        return reverse('post', kwargs={'post_id': self.pk})  # self.pk - атрибут pk
+        return reverse('post', kwargs={'post_slug': self.slug})  # self.slug - атрибут slug
 
     class Meta:  # специальный класс - для отображения модели
         verbose_name = 'Популярные личности'  # отображение в админке вместо 'Mens'
@@ -32,6 +34,7 @@ class Men (models.Model):  # наследуем все функции для н�
 class Category(models.Model):
     # db_index - для того чтобы поле было индексированным, поиск по небу будет происходить быстрей
     name = models.CharField(max_length=100, db_index=True, verbose_name='Категория')
+    slug = models.SlugField(max_length=255,unique=True, db_index=True, verbose_name='URL')
 
     # будем обращаться к категории по полю name
     def __str__(self):
@@ -39,7 +42,7 @@ class Category(models.Model):
 
     # функция формирования маршрута к ссылке
     def get_absolute_url(self):
-        return reverse('category', kwargs={'cat_id': self.pk})
+        return reverse('category', kwargs={'cat_slug': self.slug})
 
     class Meta:  # специальный класс - для отображения модели
         verbose_name = 'Категория'  # отображение в админке вместо 'Сategory'

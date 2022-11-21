@@ -1,0 +1,21 @@
+<!-- Навбар -->
+{% block mainmenu %}
+    <div class="header">
+        <ul  id="mainmenu" class="mainmenu">
+            <!-- Это лого внутри навбар -->
+            <li class="logo"><a href="{% url 'home' %}"><div class="logo"></div></a></li>
+            <!-- перебираем все в списке меню (men/views.py) -->
+            {% for m in menu %}
+
+                <!-- если не последний -->
+                {% if not forloop.last %}
+                <li><a href="{% url m.url_name %}">{{m.title}}</a></li>
+                {% else %}
+                <li class="last"><a href="{% url m.url_name %}">{{m.title}}</a></li>
+                {% endif %}                                
+            
+            {% endfor %}
+        </ul>
+    </div> <!-- <div class="header"> -->
+<!-- Конец Навбар -->
+{% endblock mainmenu %}

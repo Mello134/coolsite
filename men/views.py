@@ -1,24 +1,15 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseNotFound, Http404  # импортировали
 from .models import *  # импортируем все модели из men/models.py
-
-# список - для navbar
-menu = [{'title': 'О сайте', 'url_name': 'about'},
-        {'title': 'Добавить статью', 'url_name': 'add_page'},
-        {'title': 'Обратная связь', 'url_name': 'contact'},
-        {'title': 'Войти', 'url_name': 'login'},
-]
 
 
 def index(request):  # функция отображения главной страница
     # Берем все записи из модели Men, помещаем в переменную
     posts = Men.objects.all()
 
-
     # context - словарь передаваемых параметров
     context = {
         'posts': posts,  # все записи модели Men - title, content, photo...
-        'menu': menu,  # navbar - title, url_name
         'title': 'Главная страница',  # название страницы
         'cat_selected': 0,  # будут отображаться все записи
     }
@@ -27,7 +18,7 @@ def index(request):  # функция отображения главной ст
 
 def about(request):  # о странице
     # (request, 'men/templates/men/about.html', {'ключ':'значение'})
-    return render(request, 'men/about.html', {'menu': menu, 'title': 'О сайте'})
+    return render(request, 'men/about.html', {'title': 'О сайте'})
 
 
 def addpage(request):
@@ -47,14 +38,25 @@ def pageNotFound(request, exception):
      return HttpResponseNotFound('<h1>Страница не найдена</h1>')
 
 
-def show_post(request, post_id):  # обязательно добавь доп параметр post_id
-    return HttpResponse(f'Отображение статьи с id = {post_id}')
+def show_post(request, post_slug):  # обязательно добавь доп параметр post_slug
+    # если slug есть то есть есть запись в модели Men, то покажет страницу если нет то 404
+    post  = get_object_or_404(Men, slug=post_slug)
+
+    context = {
+        'post': post,  # все записи модели Men - title, content, photo...
+        'title': post.title,  # название страницы = название поста
+        'cat_selected': post.cat_id,  # cat_id - в модели, поле cat (id автоматом делает django)
+    }
+    return render(request, 'men/post.html', context=context)
 
 
-def show_category(request, cat_id):  # обязательно добавь доп параметр cat_id
-    # Берем только cat_id (номер категории)
-    posts = Men.objects.filter(cat_id=cat_id)
+def show_category(request, cat_slug):  # обязательно доп параметр cat_slug
+    posts = Men.objects.filter(cat__slug=cat_slug)  # cat   '__'   slug!!! cat__slug=cat_slug
 
+    # для получения cat_selected ------------------------------------
+    cat_one_record = Category.objects.get(slug=cat_slug)  # получили 1 полную запись Category
+    cat_selected = cat_one_record.pk  # получили id или pk этой записи!
+    # для получения cat_selected ------------------------------------
 
     if len(posts) == 0:  # Если количество постов 0
         raise Http404()  # отобразится страница 404 - def pageNotFound(если DEBUG = False)
@@ -63,9 +65,9 @@ def show_category(request, cat_id):  # обязательно добавь до�
     # context - словарь передаваемых параметров
     context = {
         'posts': posts,  # cat_id - к какой категории принадлежит запись в таблице Men
-        'menu': menu,  # navbar - title, url_name
         'title': 'Отображение по рубрикам',  # название страницы
-        'cat_selected': cat_id,  # cat_selected - принимает значение cat_id записи Men
+        'cat_selected': cat_selected,  # cat_selected - принимает значение cat_slug записи Men
+
     }
     # Шаблон домашней страницы, несмотря на то что это категории
     return render(request, 'men/index.html', context=context)
