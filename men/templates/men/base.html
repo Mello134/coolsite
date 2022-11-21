@@ -1,4 +1,5 @@
 {% load static %}
+{% load men_tags %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,8 +49,9 @@
         <tr><!-- строка -->
             <!-- Sidebar слева -->
             <td valign="top" class="left-chapters"><!--  столбец -->
+
+
                 <ul id="leftchapters">
-                  
                   <!--  еслы ссылка выбрана (то есть не выбрана категория никакая) 
                     тогда "все категории" отобразатся не как ссылка, а просто надписью
                     иначе, если будет выбрана какаято категория, то "все категории" - будет ссылкой -->
@@ -60,18 +62,10 @@
                     {% endif %}
 
 
-                    <!-- далее цикл: перебираем записи c в модели cats -->
-                    <!-- cats = Category.objects.all() - в def index -->
-                        <!-- проверка если ключ pk == выбранной категории cat_selected
-                        будет показывать как простую  строку (выделенную как выбраная)
-                        если не совпадают будут показывать как ссылку -->
-                    {% for c in cats %}
-                        {% if c.pk == cat_selected %} 
-                            <li class="selected">{{ c.name }}</li>
-                        {% else %}
-                            <li><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></li>
-                        {% endif %}
-                    {% endfor %}
+                    <!-- это наш тег вложенный, будет сслыатся на шаблон list_categories -->
+                    {% show_categories 'name' cat_selected %}
+                   <!--  #сортировка по имени
+                    # cat_selected уже определён в шаблоне base.html - его мы прописывали в views.py - в index html - будет равен 0, а в showpost = id категории --->
 
 
 

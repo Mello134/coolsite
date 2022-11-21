@@ -1,0 +1,12 @@
+<!-- далее цикл: перебираем записи c в модели cats -->
+<!-- cats = Category.objects.all() - def show_categories() - в men_tags -->
+    <!-- проверка если ключ pk == выбранной категории cat_selected
+    будет показывать как простую  строку (выделенную как выбраная)
+    если не совпадают будут показывать как ссылку -->
+{% for c in cats %}
+    {% if c.pk == cat_selected %} 
+        <li class="selected">{{ c.name }}</li>
+    {% else %}
+        <li><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></li>
+    {% endif %}
+{% endfor %}
