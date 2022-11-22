@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseNotFound, Http404  # импортировали
+
+from .forms import *  # из forms.py импортируем все классы форм
 from .models import *  # импортируем все модели из men/models.py
 
 
@@ -22,7 +24,24 @@ def about(request):  # о странице
 
 
 def addpage(request):
-    return HttpResponse('<h1>Страница создания статьи</h1>')
+    # 2) если уже была какая-то отправка
+    if request.method == 'POST':  # если уже что то пытались отправить
+        form = AddPostForm(request.POST)  # ?создаём экземпляр класса AddPostForm
+        if form.is_valid():  # если заполнено правильно
+            # принт это временно, чтобы понять что отобразится (в терминале)
+            # print(form.cleaned_data)
+            #
+            try:  # патаемся
+                Men.objects.create(**form.cleaned_data)  # добавляем запись в базу данных Men
+                return redirect('home')  # если добавление прошло, то возвращает path = name='home'
+            except:  # исключение (если не получилось добавить
+                # общая ошибка на странице формы
+                # чтобы её отобразить в шаблоне необходимо добавить
+                form.add_error(None, 'Ошибка добавления поста')  # общая ошибка на странице формы
+    # 1) при первом открывании формы
+    else:
+        form = AddPostForm()  # пустая форма
+    return render(request, 'men/addpage.html', {'form': form, 'title': 'Добавление статьи'})
 
 
 def contact(request):
@@ -35,12 +54,12 @@ def login(request):
 
 def pageNotFound(request, exception):
     # exception - если произошли какие-то исключения, мы должны их обработать
-     return HttpResponseNotFound('<h1>Страница не найдена</h1>')
+    return HttpResponseNotFound('<h1>Страница не найдена</h1>')
 
 
 def show_post(request, post_slug):  # обязательно добавь доп параметр post_slug
     # если slug есть то есть есть запись в модели Men, то покажет страницу если нет то 404
-    post  = get_object_or_404(Men, slug=post_slug)
+    post = get_object_or_404(Men, slug=post_slug)
 
     context = {
         'post': post,  # все записи модели Men - title, content, photo...

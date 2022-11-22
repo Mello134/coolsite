@@ -1,0 +1,41 @@
+{% extends 'men/base.html' %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<!-- # url_page = path(..name='url_page') post-передача данных/логин пароль/изображений и тд -->
+<form action="{%  url 'add_page' %}" method="post">
+	<!-- # csrf_token - для защиты от csrf атак-->
+	<!-- # form.as_p - функция as_p() - отображает все поля формы -->
+	{% csrf_token %}
+
+
+
+
+    <!-- # это из vievs.py - def addpage - except - form.add_error -->
+    <div class="form-error">{{ form.non_field_errors }}</div>
+
+		
+
+	<!-- # перебираем все поля title/slug/content/is_published/cat -->
+	<!-- # f = form.title/form.slug/from.content .. -->
+	{% for f in form %}
+
+	<!-- # for= - уникальный идентификатор, для title/slug и тд при помощи св-ва (id_for_label - встр в django) -->
+	<!-- # отображаем 'заголовок/url/Текст статьи/Публикация/Категория' поля -->
+	<!-- # отображаем поле для ввода заголовка/урла/статьи/публикации/категории -->
+	<p><label class="form-label" for="{{ f.id_for_label }}">{{ f.label }}:</label>{{ f }}</p>
+
+	<!-- # возможные ошибки при вводе заголовка (встр в django) -->
+	<div class="form-error">{{ f.errors }}</div>
+
+	{% endfor %}
+
+
+
+	<button type="submit"><!-- кнопка отправить -->
+		Добавить
+	</button>
+	</form>
+
+{% endblock %}
