@@ -4,7 +4,8 @@
 <h1>{{ title }}</h1>
 
 <!-- # url_page = path(..name='url_page') post-передача данных/логин пароль/изображений и тд -->
-<form action="{%  url 'add_page' %}" method="post">
+<!-- enctype="multipart/form-data"  -  случае получение файлов из формы обязательно! -->
+<form action="{%  url 'add_page' %}" method="post" enctype="multipart/form-data">
 	<!-- # csrf_token - для защиты от csrf атак-->
 	<!-- # form.as_p - функция as_p() - отображает все поля формы -->
 	{% csrf_token %}

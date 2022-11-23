@@ -26,18 +26,12 @@ def about(request):  # о странице
 def addpage(request):
     # 2) если уже была какая-то отправка
     if request.method == 'POST':  # если уже что то пытались отправить
-        form = AddPostForm(request.POST)  # ?создаём экземпляр класса AddPostForm
+        # request.FILES - передаём список файлов, которые были отправлены на сервер из формы
+        form = AddPostForm(request.POST, request.FILES)  # ?создаём экземпляр класса AddPostForm
         if form.is_valid():  # если заполнено правильно
-            # принт это временно, чтобы понять что отобразится (в терминале)
-            # print(form.cleaned_data)
-            #
-            try:  # патаемся
-                Men.objects.create(**form.cleaned_data)  # добавляем запись в базу данных Men
-                return redirect('home')  # если добавление прошло, то возвращает path = name='home'
-            except:  # исключение (если не получилось добавить
-                # общая ошибка на странице формы
-                # чтобы её отобразить в шаблоне необходимо добавить
-                form.add_error(None, 'Ошибка добавления поста')  # общая ошибка на странице формы
+            # print(form.cleaned_data)  - проверка в терминале
+            form.save()  # добавляем запись в базу данных Men - заменяет всю конструкцию try-except
+            return redirect('home')  # если добавление прошло, то возвращает path = name='home'
     # 1) при первом открывании формы
     else:
         form = AddPostForm()  # пустая форма
