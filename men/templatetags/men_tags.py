@@ -34,4 +34,4 @@ def show_menu():  # 4 будет возвращать полноценную htm
             {'title': 'Обратная связь', 'url_name': 'contact'},
             {'title': 'Войти', 'url_name': 'login'},
             ]
-    return {'menu': menu}  # # navbar - title, url_name
+    return {'menu': menu}  # # navbar - title, url_name - возвращаемые параметры в шаблон

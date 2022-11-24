@@ -1,7 +1,29 @@
 {% extends 'men/base.html' %}
 
 {% block content %}
+
+
+
 <ul class="list-articles">
+
+
+
+<!-- delet-delet-delet-delet-delet-delet-delet-delet-delet-delet-delet-delet-delet-delet -->
+    <!-- в целях обучения -->
+    <div style="color: red;">
+        <h2>side from views.py</h2>
+
+        {% for s in side %}
+        <li><a href="{% url s.url_name %}">{{s.title}}</a></li>
+        {% endfor %}
+    </div>
+    <br><br><br>
+<!-- delet-delet-delet-delet-delet-delet-delet-delet-delet-delet-delet-delet-delet-delet -->
+
+    
+
+
+    <!-- # object_list по сути равно Men.object.all() -->
     {% for p in posts %}
     <li>
         <div class="article-panel">
