@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseNotFound, Http404  # импортировали
 from django.urls import reverse_lazy
@@ -105,8 +106,13 @@ class MenCategory(DataMixin, ListView):
 
 
 def about(request):  # о странице
+    contact_list = Men.objects.all()  # читаем список записей модели
+    paginator = Paginator(contact_list, 2)  # создаём экземпляр Paginator, 3 - количество элементов на странице
+    page_number = request.GET.get('page')  # получаем номер текущей страницы
+    page_obj = paginator.get_page(page_number)  # содержит список элементов текущей страницы
     # (request, 'men/templates/men/about.html', {'ключ':'значение'})
-    return render(request, 'men/about.html', {'menu': menu, 'title': 'О сайте'})
+    # передаём page_obj, menu, title в шаблон
+    return render(request, 'men/about.html', {'menu': menu, 'title': 'О сайте', 'page_obj': page_obj})
 
 
 # Функция представления страницы формы добавления поста

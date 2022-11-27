@@ -2,5 +2,24 @@
 
 {% block content %}
 <h1>{{ title }}</h1>
-<p>здесь будет информация о сайте</p>
+
+{% for contact in page_obj %}
+	<p>{{ contact }}</p>
+{% endfor %}
+
+<nav>
+	<ul>
+   <!-- #  page_obj - ссылка на конкр страницу пагинатора
+		#  paginator - ссылка на сам класс пагинатор
+		#  page_range - формирует range (от,до) - номера страниц
+		#  p - по сути просто номер страницы -->
+		{% for p in page_obj.paginator.page_range %}
+		<li>
+			<a href="?page={{ p }}">{{ p }}</a>
+		</li>
+		{% endfor %}
+	</ul>
+</nav>
+
+
 {% endblock %}
