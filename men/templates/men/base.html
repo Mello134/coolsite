@@ -23,8 +23,32 @@
         <tr>
             <td valign=top>
                 
-                <!-- меню навбара вложенный тег -->
-                {% show_menu %}
+
+
+                <!-- Навбар -->
+                {% block mainmenu %}
+                    <div class="header">
+                        <ul  id="mainmenu" class="mainmenu">
+                            <!-- Это лого внутри навбар -->
+                            <li class="logo"><a href="{% url 'home' %}"><div class="logo"></div></a></li>
+                            <!-- перебираем все в списке меню (men/views.py) -->
+                            {% for m in menu %}
+
+                                <!-- если не последний -->
+                                {% if not forloop.last %}
+                                <li><a href="{% url m.url_name %}">{{m.title}}</a></li>
+                                {% else %}
+                                <li class="last"><a href="{% url m.url_name %}">{{m.title}}</a></li>
+                                {% endif %}                                
+                            
+                            {% endfor %}
+                        </ul>
+                        <div class="clear"></div>
+                    </div> <!-- <div class="header"> -->
+                <!-- Конец Навбар -->
+                {% endblock mainmenu %}
+
+
 
 
     <table class="table-content" border=0 cellpadding="0" cellspacing="0">
@@ -44,10 +68,17 @@
                     {% endif %}
 
 
-                    <!-- это наш тег вложенный, будет сслыатся на шаблон list_categories -->
-                    {% show_categories 'name' cat_selected %}
-                   <!--  #сортировка по имени
-                    # cat_selected уже определён в шаблоне base.html - его мы прописывали в views.py - в index html - будет равен 0, а в showpost = id категории --->
+
+                    <!-- # cats = Category.objects.all() из utils.py/ class DataMixin -->
+                    {% for c in cats %}
+                        {% if c.men__count > 0 %}
+                            {% if c.pk == cat_selected %} 
+                                <li class="selected">{{ c.name }}</li>
+                            {% else %}
+                                <li><a href="{{ c.get_absolute_url }}">{{ c.name }}</a></li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
 
 
 

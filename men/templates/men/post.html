@@ -1,7 +1,10 @@
 {% extends 'men/base.html' %}
 
 {% block content %}
+
+
 <h1>{{ post.title }}</h1>
+<p><a href="{{ post.cat.get_absolute_url }}">Из категории: {{ post.cat }}</a></p>
 
 {% if post.photo %}
 <p>
@@ -10,8 +13,6 @@
 {% endif %}
 
 
-<h1>{{ cat }}</h1>
-<h1>{{ cat }}</h1>
 {{ post.content|linebreaks }}
 
 {% endblock %}
