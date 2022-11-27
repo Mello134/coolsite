@@ -188,3 +188,18 @@ class ShowPost(DataMixin, DetailView):  # создаём класс ShowPost, н
         c_def = self.get_user_context(title=context['post'], cat_selected='Что бы ничего не выделялось')
         # posts + cats + cat_selected + menu + title
         return dict(list(context.items()) + list(c_def.items()))
+
+
+# представление регистрации
+class RegisterUser(DataMixin, CreateView):
+    form_class = RegisterUserForm  # RegisterUserForm - наша форма из forms.py
+    template_name = 'men/register.html'  # ссылка на шаблон
+    success_url = reverse_lazy('login')  # при успешной регистрации - будем перенаправляться в path - login
+
+    # формируем context (список передаваемых словарей в шаблон)
+    def get_context_data(self, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)  # form_class - на данный момент
+        c_def = self.get_user_context(title='Регистрация')
+        # form_class + cats + cat_selected + menu + title
+        return dict(list(context.items()) + list(c_def.items()))
+

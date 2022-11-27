@@ -31,17 +31,17 @@
                         <ul  id="mainmenu" class="mainmenu">
                             <!-- Это лого внутри навбар -->
                             <li class="logo"><a href="{% url 'home' %}"><div class="logo"></div></a></li>
-                            <!-- перебираем все в списке меню (men/views.py) -->
+                            
+
+                          
                             {% for m in menu %}
 
-                                <!-- если не последний -->
-                                {% if not forloop.last %}
-                                <li><a href="{% url m.url_name %}">{{m.title}}</a></li>
-                                {% else %}
-                                <li class="last"><a href="{% url m.url_name %}">{{m.title}}</a></li>
-                                {% endif %}                                
-                            
+                            <li><a href="{% url m.url_name %}">{{m.title}}</a></li>
+
                             {% endfor %}
+
+                            <li class="last"><a href="{% url 'register' %}">Регистрация</a> | <a href="{% url 'login' %}">Войти</a></li>
+
                         </ul>
                         <div class="clear"></div>
                     </div> <!-- <div class="header"> -->
