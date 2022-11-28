@@ -136,9 +136,11 @@ STATICFILES_DIRS = []
 
 
 # import os.path # обязательно импортируй, если показывать пути через os.path
-# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # будет загружать медия в папку media
-MEDIA_ROOT = BASE_DIR / 'media'  # будет загружать медия в папку media
-MEDIA_URL = '/media/'  # добавили url - будет отображатся в браузере
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # будет загружать медиа в папку media
+MEDIA_ROOT = BASE_DIR / 'media'  # будет загружать медиа в папку media
+MEDIA_URL = '/media/'  # добавили url - будет отображаться в браузере
+
+# LOGIN_REDIRECT_URL = '/'  # При успешной аутентификации - перенаправление на home-page
 
 
 

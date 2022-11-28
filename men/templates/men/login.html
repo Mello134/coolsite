@@ -1,0 +1,36 @@
+{% extends 'men/base.html' %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<form method="post">
+	<!-- # csrf_token - для защиты от csrf атак-->
+	<!-- # form.as_p - функция as_p() - отображает все поля формы -->
+	{% csrf_token %}
+	
+
+	<!-- ошибки если неверный логин и пароль -->
+	<div class="form-error">
+		{{ form.non_field_errors }}
+	</div>
+
+	<!-- вывод Логин, Пароль и формы заполнения -->
+	{% for f in form %}
+	<p>
+		<label class="form-label" for="{{ f.id_for_label }}">
+			{{ f.label }}: 
+		</label>
+		{{ f }}
+	</p>
+
+	<!-- ошибки если возникнут -->
+	<div class="form-error">
+		{{ f.errors }}
+	</div>
+	{% endfor %}
+
+	<!-- кнопка войти -->
+	<button type="submit">Войти</button>
+</form>
+
+{% endblock %}

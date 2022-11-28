@@ -1,3 +1,5 @@
+from django.contrib.auth import logout, login
+from django.contrib.auth.views import LoginView
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseNotFound, Http404  # импортировали
@@ -152,8 +154,8 @@ def contact(request):
     return HttpResponse('<h1>Страница Обратной связи</h1>')
 
 
-def login(request):
-    return HttpResponse('<h1>Авторизация</h1>')
+# def login(request):
+#     return HttpResponse('<h1>Авторизация</h1>')
 
 
 def pageNotFound(request, exception):
@@ -202,4 +204,32 @@ class RegisterUser(DataMixin, CreateView):
         c_def = self.get_user_context(title='Регистрация')
         # form_class + cats + cat_selected + menu + title
         return dict(list(context.items()) + list(c_def.items()))
+
+    # при успешной регистрации - автоматом залогинивает пользователя
+    def form_valid(self, form):
+        user = form.save()  # сохраняем форму в БД
+        login(self.request, user)  # авторизовывает пользователя
+        return redirect('home')  # перенаправит домой
+
+
+# Класс представления формы авторизации
+# Логика работы базового класса LoginView + сама форма LoginUserForm
+class LoginUser(DataMixin, LoginView):
+    form_class = LoginUserForm  # наша форма из forms.py
+    template_name = 'men/login.html'  # шаблон
+
+    # формирование контекста для передачи в шаблон
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title="Авторизация")
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def get_success_url(self):
+        return reverse_lazy('home') # после входа отправит домой
+
+
+# функция представления - выхода из аккаунта
+def logout_user(request):
+    logout(request)
+    return redirect('login') # перенаправляем на авторизацию
 
