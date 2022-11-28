@@ -42,7 +42,7 @@ class MenHome(DataMixin, ListView):
     def get_queryset(self):
         # возвращаем то какие записи должны быть прочитаны из модели Men
         # будут прочитаны и отображены только с галочкой
-        return Men.objects.filter(is_publisher=True)
+        return Men.objects.filter(is_publisher=True).select_related('cat')  # .select_related('cat') - оптимизация SQL запросов
 
 
 # функция представления домашней страницы категорий(музыканты актёры)
@@ -59,15 +59,16 @@ class MenCategory(DataMixin, ListView):
         # Записи по фильтру 1 - self обращаемся к словарю kwargs, берём параметр маршрута из path - cat_slug,
         # is_publisher = True - только опубликованные
         # cat__slug - через cat из Men, ссылаемся уже в Category - и обращаемся к Category -полю slug
-        return Men.objects.filter(cat__slug=self.kwargs['cat_slug'], is_publisher=True)
+        return Men.objects.filter(cat__slug=self.kwargs['cat_slug'], is_publisher=True).select_related('cat')  # оптимизация SQL
 
     # Передаём параметры в шаблон (функция формирует и динамический и статический контекст)
     def get_context_data(self, *, object_list=None, **kwargs):
         # берём уже существующий контекст get_context_data =  ('posts')
         # **kwargs - распаковываем словарь kwargs
         context = super().get_context_data(**kwargs)  # на этом моменте у нас уже есть posts
-        c_def = self.get_user_context(title='Категория - ' + str(context['posts'][0].cat),
-                                      cat_selected=context['posts'][0].cat_id)
+        c = Category.objects.get(slug=self.kwargs['cat_slug'])
+        c_def = self.get_user_context(title='Категория - ' + str(c.name),
+                                      cat_selected=c.pk)
 
         return dict(list(context.items()) + list(c_def.items()))
 

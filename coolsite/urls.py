@@ -16,23 +16,26 @@ Including another URLconf
 from django.conf.urls.static import static  # для DEBUG пути
 from django.contrib import admin
 from django.urls import path
-
 from coolsite import settings  # для DEBUG пути
 from men.views import *  # импортировали из men/views.py  - все функции
-
-
 from django.urls import include  # импорт функции include
-
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('men.urls')),  # путь к путям к приложению men
 ]
+
 # то есть в режиме отладки когда DEBUG = True
 if settings.DEBUG:
+    # для debug_toolbar
+    import debug_toolbar
+    urlpatterns = [
+        path('__debug__/', include('debug_toolbar.urls')),
+    ] + urlpatterns
+
     # к путям добавляем путь к статическим данным, графическим данным
-    # на реальныъ серверах обычно это не используется
+    # на реальных серверах обычно это не используется
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler404 = pageNotFound
