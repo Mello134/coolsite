@@ -23,6 +23,7 @@ from django.urls import include  # импорт функции include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('captcha/', include('captcha.urls')),
     path('', include('men.urls')),  # путь к путям к приложению men
 ]
 

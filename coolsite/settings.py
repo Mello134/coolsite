@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "debug_toolbar",  # добавили debug-toolbar
+    'captcha',  # добавили каптчу
     'men.apps.MenConfig',  # добавили coolsite/men/apps.py - class MenConfig(AppConfig)
 
 ]

@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import AuthenticationForm
+from captcha.fields import CaptchaField
 
 from .models import *  # все модели models.py
 
@@ -52,3 +53,12 @@ class RegisterUserForm(UserCreationForm):  # создаём экземпляр �
 class LoginUserForm(AuthenticationForm):  # AuthenticationForm - стандартная форма
     username = forms.CharField(label='Логин', widget=forms.TextInput(attrs={'class': 'form.input'}))
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form.input'}))
+
+
+# форма контактов
+class ContactForm(forms.Form):  # наследуемся от базового класса форма
+    # поля формы
+    name = forms.CharField(label='Имя', max_length=255)
+    email = forms.EmailField(label='Email')
+    content = forms.CharField(label='Контент', widget=forms.Textarea(attrs={'cols': 60, 'rows': 10}))
+    captcha = CaptchaField()  # класс каптчи

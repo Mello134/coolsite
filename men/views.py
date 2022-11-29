@@ -4,7 +4,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseNotFound, Http404  # импортировали
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView  # функции представления
+from django.views.generic import ListView, DetailView, CreateView, FormView  # функции представления
 
 from .forms import *  # из forms.py импортируем все классы форм
 from .models import *  # импортируем все модели из men/models.py
@@ -151,8 +151,23 @@ class AddPage(LoginRequiredMixin, DataMixin, CreateView):
 # return render(request, 'men/addpage.html', {'form': form, 'title': 'Добавление статьи'})
 
 
-def contact(request):
-    return HttpResponse('<h1>Страница Обратной связи</h1>')
+#  def contact(request):
+#      return HttpResponse('<h1>Страница Обратной связи</h1>')
+
+
+class ContactFormView(DataMixin, FormView):  # FormView - базовый класс - не привязан к модели
+    form_class = ContactForm  # наш класс из form.py
+    template_name = 'men/contact.html'  # ссылка на шаблон
+    success_url = reverse_lazy('home')  # при успешном заполнении формы - направит домой
+
+    def get_context_data(self, *, object_list=None, **kwargs):  # формируем context - для шаблона
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Обратная связь')
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def form_valid(self, form):  # если пользователь правильно заполнит формы
+        print(form.cleaned_data)
+        return redirect('home')
 
 
 # def login(request):
