@@ -1,5 +1,5 @@
 from django.db.models import Count
-
+from django.core.cache import cache
 from men.models import Category
 
 menu = [{'title': 'О сайте', 'url_name': 'about'},
@@ -14,7 +14,11 @@ class DataMixin:
     def get_user_context(self, **kwargs):
         # формируем начальный словарь context - из именованных параметров переданной методу g_u_c
         context = kwargs
-        cats = Category.objects.annotate(Count('men'))  # количество постов в каждой рубрике
+        cats = cache.get('cats')  # вызываем cache, пытаемся прочитать из cats из кэша
+        if not cats: # если cats не были прочитаны
+            #  читаем данные из БД
+            cats = Category.objects.annotate(Count('men'))  # количество постов в каждой рубрике
+            cache.set('cats', cats, 60)  # записываем кэш на 60 сек
 
         # копируем всё меню в новую переменную (когда будет вызываться метод get_user_context)
         user_menu = menu.copy()
