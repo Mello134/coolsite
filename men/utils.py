@@ -15,7 +15,7 @@ class DataMixin:
         # формируем начальный словарь context - из именованных параметров переданной методу g_u_c
         context = kwargs
         cats = cache.get('cats')  # вызываем cache, пытаемся прочитать из cats из кэша
-        if not cats: # если cats не были прочитаны
+        if not cats:  # если cats не были прочитаны
             #  читаем данные из БД
             cats = Category.objects.annotate(Count('men'))  # количество постов в каждой рубрике
             cache.set('cats', cats, 60)  # записываем кэш на 60 сек
